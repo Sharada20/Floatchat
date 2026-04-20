@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FloatChat - AI Ocean Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0a0a1a;
+      --secondary: #1a1a2e;
+      --accent: #2563eb;
+      --accent-light: #3b82f6;
+      --surface: #0f0f23;
+      --surface-light: #171733;
+      --text-primary: #ffffff;
+      --text-secondary: #a3a3d3;
+      --text-muted: #5252a2;
+      --border: #262644;
+      --border-light: #404066;
+      --success: #10b981;
+      --ocean-blue: #1e40af;
+      --ocean-teal: #0891b2;
+      --ocean-purple: #7c3aed;
+      --glow-blue: rgba(37, 99, 235, 0.6);
+      --glow-teal: rgba(8, 145, 178, 0.4);
+      --glow-purple: rgba(124, 58, 237, 0.3);
+    }
+
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: linear-gradient(-45deg, #0a0a1a, #1a1a2e, #0f0f23, #171733);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, var(--glow-blue) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, var(--glow-teal) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, var(--glow-purple) 0%, transparent 50%);
+      opacity: 0.1;
+      animation: floatingGlow 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatingGlow {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 0.1;
+      }
+      33% { 
+        transform: scale(1.1) rotate(120deg);
+        opacity: 0.15;
+      }
+      66% { 
+        transform: scale(0.9) rotate(240deg);
+        opacity: 0.08;
+      }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #0891b2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    /* Hero Section */
+    .hero {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 60px;
+      padding: 60px 0;
+    }
+
+    .hero-content {
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 0%, #3b82f6 30%, #0891b2 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-visual {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .ocean-orb {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle at 30% 30%, var(--ocean-teal), var(--ocean-blue), var(--ocean-purple));
+      border-radius: 50%;
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+      box-shadow: 
+        0 0 80px rgba(37, 99, 235, 0.3),
+        0 0 120px rgba(8, 145, 178, 0.2),
+        inset 0 0 60px rgba(255, 255, 255, 0.1);
+    }
+
+    .ocean-orb::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.02); }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 80px 0;
+    }
+
+    .feature-card {
+      background: rgba(15, 15, 35, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-8px);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(37, 99, 235, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #0891b2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--ocean-blue) 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 32px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--ocean-teal) 100%);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 
+        0 12px 30px rgba(37, 99, 235, 0.4),
+        0 0 30px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--surface-light) 0%, rgba(23, 23, 51, 0.9) 100%);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(38, 38, 68, 0.9) 100%);
+      border-color: var(--border-light);
+      box-shadow: 
+        0 8px 25px rgba(255, 255, 255, 0.1),
+        0 0 20px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+      }
+
+      .hero-content {
+        max-width: 100%;
+      }
+
+      .ocean-orb {
+        width: 300px;
+        height: 300px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .hero {
+        padding: 40px 0;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .ocean-orb {
+        width: 250px;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">FloatChat</div>
+      <div class="tagline">AI Ocean Intelligence Platform</div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Explore Ocean Data with AI
+        </h1>
+        <p class="hero-subtitle">
+          FloatChat brings artificial intelligence to ocean exploration. Analyze ARGO float data, 
+          understand marine patterns, and uncover ocean insights with our intelligent platform.
+        </p>
+        <div class="btn-group">
+          <a href="floatchat.html" class="btn">
+            <span>🚀 Start Exploring</span>
+          </a>
+          <a href="#features" class="btn btn-secondary">
+            <span>🌊 Learn More</span>
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="ocean-orb"></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3 class="feature-title">AI-Powered Analysis</h3>
+        <p class="feature-description">
+          Advanced AI algorithms analyze oceanographic data in real-time, providing insights 
+          into temperature, salinity, currents, and marine ecosystems.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3 class="feature-title">Global ARGO Network</h3>
+        <p class="feature-description">
+          Access and visualize data from thousands of ARGO floats worldwide, tracking ocean 
+          conditions across all major basins and depths.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Interactive Visualization</h3>
+        <p class="feature-description">
+          Beautiful, interactive maps and charts that make complex ocean data accessible 
+          and understandable for researchers and enthusiasts alike.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2 class="cta-title">Ready to Dive In?</h2>
+      <p class="cta-subtitle">
+        Join ocean explorers worldwide in uncovering the mysteries of our blue planet. 
+        Start your journey with FloatChat today.
+      </p>
+      <a href="floatchat.html" class="btn">
+        <span>🌊 Begin Your Ocean Exploration</span>
+      </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">&copy; 2024 FloatChat. Making ocean data accessible to everyone.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate feature cards on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe feature cards
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+      });
+    });
+  </script>
+</body>
+</html>
+
